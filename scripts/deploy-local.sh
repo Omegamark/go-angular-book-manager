@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# TODO: This script is causing a race where pods are trying to be set
+# before the namespace has been created. Make adjustments, possibly try
+# to remove "kind". Maybe it's OK, but there must be an easier way.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -40,6 +43,7 @@ kubectl -n storepractice wait --for=condition=available --timeout=120s deploymen
 kubectl -n storepractice wait --for=condition=available --timeout=120s deployment/frontend || true
 kubectl -n storepractice wait --for=condition=available --timeout=120s deployment/postgres || true
 
+# TODO: I hate this migration, figure out a simpler way.
 # --- NEW: run DB migration using psql inside the postgres pod ---
 echo "Running DB migration..."
 
