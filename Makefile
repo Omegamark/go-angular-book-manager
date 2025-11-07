@@ -18,3 +18,11 @@ migrate:
 
 verify-migration:
 	docker exec -i storepractice-db psql -U postgres -d storepractice -c "\dt"
+
+start-backend:
+	cd backend
+	go run cmd/main.go
+
+start-frontend:
+	cd frontend/book-management
+	ng serve
