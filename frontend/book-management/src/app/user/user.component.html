@@ -1,0 +1,12 @@
+<div class="header">
+    <h1>
+        User
+        <small *ngIf="userName"> — {{ userName }}</small>
+    </h1>
+    <button class="home-btn" routerLink="/">Return Home</button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()" class="user-form">
+    <input formControlName="name" placeholder="Enter your name" />
+    <button type="submit" [disabled]="form.invalid">Set Name</button>
+</form>

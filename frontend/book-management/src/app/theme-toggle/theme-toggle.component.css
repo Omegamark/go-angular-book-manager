@@ -1,0 +1,18 @@
+.theme-toggle{
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9999;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: none;
+  background: var(--toggle-bg);
+  color: var(--toggle-fg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.theme-toggle:focus{ outline: 2px solid rgba(0,0,0,0.2); }

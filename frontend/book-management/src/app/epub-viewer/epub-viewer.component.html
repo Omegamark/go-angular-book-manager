@@ -1,0 +1,24 @@
+<div class="header">
+    <h1>
+        Epub Viewer
+        <small *ngIf="userName$ | async as name"> — {{ name }}</small>
+
+    </h1>
+    <button class="home-btn" routerLink="/">Return Home</button>
+</div>
+
+<div class="epub-controls">
+    <label class="file-label">
+        Open .epub
+        <input type="file" accept=".epub" (change)="onFileChange($event)" />
+    </label>
+
+    <div class="nav-controls" *ngIf="isRendered">
+        <button type="button" (click)="prevPage()">Page Up</button>
+        <button type="button" (click)="nextPage()">Page Down</button>
+    </div>
+</div>
+
+<div #viewer class="epub-viewer"></div>
+
+<app-theme-toggle></app-theme-toggle>

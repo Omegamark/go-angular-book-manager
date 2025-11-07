@@ -1,0 +1,13 @@
+<div class="home">
+    <h1>Welcome To Book List & Epub
+        <small *ngIf="userName$ | async as name"> — {{ name }}</small>
+
+    </h1>
+    <div class="home-actions">
+        <button routerLink="/book-list">Book List</button>
+        <button routerLink="/epub-viewer">EPUB Viewer</button>
+        <button routerLink="/user">User</button>
+    </div>
+</div>
+
+<app-theme-toggle></app-theme-toggle>

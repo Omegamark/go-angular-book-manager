@@ -1,0 +1,4 @@
+<button class="theme-toggle" (click)="toggle()" [attr.aria-pressed]="(theme$ | async) === 'dark'">
+    <span *ngIf="(theme$ | async) === 'dark'">light</span>
+    <span *ngIf="(theme$ | async) === 'light'">dark</span>
+</button>

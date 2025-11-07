@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+/* CSS for light and dark theme */
+:root{
+  --bg: #ffffff;
+  --fg: #222222;
+  /* --card-bg: #f8f8f8; */
+  --toggle-bg: #007bff;
+  --toggle-fg: #ffffff;
+}
+
+.dark-mode{
+  --bg: #111111;
+  --fg: #f1f1f1;
+  /* --card-bg: #1b1b1b; */
+  --toggle-bg: #444444;
+  --toggle-fg: #ffffff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+}
+
+/* .header{
+  background: var(--card-bg);
+  color: var(--fg);
+} */

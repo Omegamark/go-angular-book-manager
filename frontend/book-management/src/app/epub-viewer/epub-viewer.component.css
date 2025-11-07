@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.home-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.home-btn:hover { background: #0056b3; }
+
+:host {
+    display: block;
+    height: 80vh;
+}
+
+.epub-controls {
+    margin-bottom: 8px;
+}
+
+.file-label input[type="file"] {
+    display:inline-block;
+}
+
+.epub-viewer {
+    width: 100%;
+    height: calc(100% - 36px);
+    border: 1px solid #ddd;
+    overflow: auto;
+}

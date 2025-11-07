@@ -1,0 +1,53 @@
+<div class="header">
+    <h1>
+        Books
+        <small *ngIf="userName$ | async as name"> — {{ name }}</small>
+    </h1>
+    <button class="home-btn" routerLink="/">Return Home</button>
+
+</div>
+
+<!-- TODO: Try this else statement once delete is working and understand what it is doing -->
+<!-- <div *ngIf="books$ | async as books; else noBooks"> -->
+<div *ngFor="let book of books$ | async">
+    <h2>{{book.title}}</h2>
+    <h3>{{book.author}}</h3>
+    <button (click)="onRemoveBook(book.id)">Remove Book</button>
+</div>
+<!-- </div -->
+
+<!-- This is in reference to the *ngIf directive above -->
+<!-- <ng-template #noBooks
+ <p>No books available.</p>
+ </ng-template>
+  -->
+
+<form [formGroup]="bookForm" (ngSubmit)="onAddBook()">
+
+    <div *ngIf="errorMessage" class="error">{{errorMessage}}</div>
+
+    <div>
+        <input formControlName="id" type="text" placeholder="Book Id"
+            [class.field-highlight]="bookForm.get('id')?.invalid && (bookForm.get('id')?.touched || bookForm.errors?.['submitFailed'])">
+        <div *ngIf="bookForm.get('id')?.touched && bookForm.get('id')?.hasError('required')" class="field-error">
+            Book id is required
+        </div>
+
+        <input formControlName="title" type="text" placeholder="Book Title"
+            [class.field-highlight]="bookForm.get('title')?.invalid && (bookForm.get('title')?.touched || bookForm.errors?.['submitFailed'])">
+        <div *ngIf="bookForm.get('title')?.touched && bookForm.get('title')?.hasError('required')" class="field-error">
+            Title is required
+        </div>
+
+        <input formControlName="author" type="text" placeholder="Author"
+            [class.field-highlight]="bookForm.get('author')?.invalid && (bookForm.get('author')?.touched || bookForm.errors?.['submitFailed'])">
+        <div *ngIf="bookForm.get('author')?.touched && bookForm.get('author')?.hasError('required')"
+            class="field-error">
+            Author is required
+        </div>
+
+        <button type="submit">Add Book</button>
+    </div>
+</form>
+
+<app-theme-toggle></app-theme-toggle>
