@@ -31,4 +31,7 @@ if kind get clusters | grep -q "$KIND_CLUSTER_NAME"; then
   kind delete cluster --name "$KIND_CLUSTER_NAME"
 fi
 
+# switch back to rancher-desktop context so kubectl doesn't scream
+kubectl config use-context rancher-desktop
+
 echo "Teardown complete."

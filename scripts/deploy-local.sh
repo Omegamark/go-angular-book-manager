@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# TODO: This script is causing a race where pods are trying to be set
+# TODO: This script is causing a race where pods are attempting to mount
 # before the namespace has been created. Make adjustments, possibly try
-# to remove "kind". Maybe it's OK, but there must be an easier way.
+# to remove "kind". Maybe it's OK, but there might be an easier way.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"

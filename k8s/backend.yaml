@@ -1,3 +1,4 @@
+# Add Ingress Routes to this and remove port-forwarding from deploy scripts
 apiVersion: apps/v1
 kind: Deployment
 metadata:

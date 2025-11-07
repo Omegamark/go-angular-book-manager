@@ -1,3 +1,5 @@
+# TODO: This manifest is currently broken. Get frontend working.
+# TODO: Add ingress-routes and remove port-forwarding from deploy scripts
 apiVersion: apps/v1
 kind: Deployment
 metadata:
