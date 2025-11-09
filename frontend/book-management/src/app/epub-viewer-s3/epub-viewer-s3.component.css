@@ -1,0 +1,4 @@
+.header { display:flex; align-items:center; gap:1rem; margin-bottom:0.5rem; }
+.epub-list { margin-bottom:1rem; }
+.viewer-wrapper { position:relative; }
+.controls { margin-top:0.5rem; }

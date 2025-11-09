@@ -1,0 +1,23 @@
+<div class="header">
+  <h1>Epub Viewer (S3)</h1>
+  <small *ngIf="userName$ | async as name"> — {{ name }}</small>
+  <button class="home-btn" routerLink="/">Return Home</button>
+</div>
+
+<div class="epub-list">
+  <h3>Available EPUBs (S3)</h3>
+  <ul>
+    <li *ngFor="let e of (epubList$ | async)">
+      <span>{{ e.title || e.key }}</span>
+      <button (click)="openFromS3(e)">Open</button>
+    </li>
+  </ul>
+</div>
+
+<div class="viewer-wrapper">
+  <div #viewer class="epub-viewer" style="height:600px;border:1px solid #ddd"></div>
+  <div class="controls">
+    <button (click)="prevPage()">Prev</button>
+    <button (click)="nextPage()">Next</button>
+  </div>
+</div>

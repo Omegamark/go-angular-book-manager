@@ -5,25 +5,76 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/Omegamark/book-epub-manager-backend/internal/domain"
 	"github.com/Omegamark/book-epub-manager-backend/internal/service"
+	"github.com/Omegamark/book-epub-manager-backend/internal/storage"
 	"github.com/gorilla/mux"
 )
 
 type Handler struct {
 	service *service.BookService
+	storage storage.Storage
 }
 
-func NewHandler(s *service.BookService) *Handler {
-	return &Handler{service: s}
+func NewHandler(s *service.BookService, st storage.Storage) *Handler {
+	return &Handler{service: s, storage: st}
 }
 
 func (h *Handler) RegisterRoutes(r *mux.Router) {
+	// Book Service Endpoints
 	api := r.PathPrefix("/api").Subrouter()
 	api.HandleFunc("/books", h.getBooks).Methods(http.MethodGet)
 	api.HandleFunc("/books", h.createBook).Methods(http.MethodPost)
 	api.HandleFunc("/books/{id}", h.deleteBook).Methods(http.MethodDelete)
+
+	// storage epub endpoints
+	api.HandleFunc("/epubs", h.listEpubs).Methods(http.MethodGet)
+	api.HandleFunc("/epubs/presign", h.presignEpub).Methods(http.MethodGet)
+}
+
+func (h *Handler) listEpubs(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	prefix := r.URL.Query().Get("prefix")
+	if prefix == "" {
+		prefix = "books/"
+	}
+
+	fmt.Println("URL: ", r.URL.String())
+
+	entries, err := h.storage.ListEpubs(ctx, prefix)
+	if err != nil {
+		fmt.Println("ERR 1: ", err)
+		h.handleError(w, err)
+		return
+	}
+
+	// CORS Header
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:4200")
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(entries)
+}
+
+func (h *Handler) presignEpub(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	key := r.URL.Query().Get("key")
+	if key == "" {
+		http.Error(w, "missing key param", http.StatusBadRequest)
+		return
+	}
+
+	// 15 min expiration
+	url, err := h.storage.PresignGet(ctx, key, 15*time.Minute)
+	if err != nil {
+		fmt.Println("Err 2: ", err)
+		h.handleError(w, err)
+		return
+	}
+	// CORS header
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:4200")
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"url": url})
 }
 
 func (h *Handler) getBooks(w http.ResponseWriter, r *http.Request) {

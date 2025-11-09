@@ -10,7 +10,10 @@ import (
 
 	"github.com/Omegamark/book-epub-manager-backend/internal/repository/postgres"
 	"github.com/Omegamark/book-epub-manager-backend/internal/service"
+	s3adapter "github.com/Omegamark/book-epub-manager-backend/internal/storage/s3"
 	httptransport "github.com/Omegamark/book-epub-manager-backend/internal/transport/http"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/cors"
@@ -26,6 +29,7 @@ func Run() {
 	ctx := context.Background()
 
 	// retry connect a few times (docker container may still be starting)
+	// TODO: This retry logic should really be moved out of this file.
 	var pool *pgxpool.Pool
 	var err error
 
@@ -50,9 +54,33 @@ func Run() {
 	}
 	defer pool.Close()
 
+	// Initialize S3 Storage
+	bucket := os.Getenv("S3_BUCKET")
+	if bucket == "" {
+		bucket = "epubs-demo-bucket"
+	}
+	prefix := os.Getenv("S3_PREFIX")
+	if prefix == "" {
+		prefix = "books/"
+	}
+
+	region := "ap-southeast-2"
+	accessKey := ""
+	secretKey := ""
+
+	awsCfg := aws.Config{
+		Region:      region,
+		Credentials: credentials.NewStaticCredentialsProvider(accessKey, secretKey, ""),
+	}
+
+	s3Storage, err := s3adapter.New(ctx, bucket, &awsCfg)
+	if err != nil {
+		log.Fatalf("S3 init failed: %v", err)
+	}
+
 	repo := postgres.NewPostgresBookRepo(pool)
-	svc := service.NewBookService(repo)
-	handler := httptransport.NewHandler(svc)
+	bookSvc := service.NewBookService(repo)
+	handler := httptransport.NewHandler(bookSvc, s3Storage)
 
 	r := mux.NewRouter()
 	handler.RegisterRoutes(r)
@@ -66,8 +94,10 @@ func Run() {
 	})
 
 	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: c.Handler(r),
+		Addr:         ":8080",
+		Handler:      c.Handler(r),
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
 	}
 
 	// start server

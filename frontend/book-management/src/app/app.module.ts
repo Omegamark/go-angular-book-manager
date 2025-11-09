@@ -16,6 +16,7 @@ import { AppHomeComponent } from './app-home/app-home.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { UserComponent } from './user/user.component';
 import { UserReducer } from './user/user.reducer';
+import { EpubViewerS3Component } from './epub-viewer-s3/epub-viewer-s3.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UserReducer } from './user/user.reducer';
     EpubViewerComponent,
     AppHomeComponent,
     ThemeToggleComponent,
-    UserComponent
+    UserComponent,
+    EpubViewerS3Component
   ],
   imports: [
     BrowserModule,
