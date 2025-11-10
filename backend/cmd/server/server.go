@@ -20,6 +20,7 @@ import (
 )
 
 func Run() {
+	// TODO: This run function is a mess, needs to be broken out and cleaned up.
 	// Use DATABASE_URL if set, otherwise connect to the docker container on localhost
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
@@ -55,6 +56,7 @@ func Run() {
 	defer pool.Close()
 
 	// Initialize S3 Storage
+	// TODO: Need to break this out to the k8s manifests once the backend is working.
 	bucket := os.Getenv("S3_BUCKET")
 	if bucket == "" {
 		bucket = "epubs-demo-bucket"
@@ -85,7 +87,7 @@ func Run() {
 	r := mux.NewRouter()
 	handler.RegisterRoutes(r)
 
-	// allow requests from frontend dev server (adjust origin as needed)
+	// CORS stuff to allow requests from frontend dev server (adjust origin as needed)
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:4200"},
 		AllowedMethods:   []string{"GET", "POST", "DELETE", "OPTIONS"},
