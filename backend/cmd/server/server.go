@@ -67,8 +67,8 @@ func Run() {
 	}
 
 	region := "ap-southeast-2"
-	accessKey := ""
-	secretKey := ""
+	accessKey := "Add your aws access key"
+	secretKey := "Add your aws secret key"
 
 	awsCfg := aws.Config{
 		Region:      region,
