@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 
+// TODO: This should maybe moved to models
 export interface EpubEntry {
   key: string;
   title?: string;
